@@ -21,8 +21,8 @@ class LinearRegression:
             predictions = np.dot(self.feature_data, self.weight) + self.bias
 
             # Parital differentiation of cost function MSE J = sum(( prediction - actual)^2)/sample_count
-            # dJ/dW = 2X(prediction - actual)/sample_count
-            # dJ/dB = 2(prediction - actual)/sample_count
+            # dJ/dW = 2*X*(prediction - actual)/sample_count
+            # dJ/dB = 2*(prediction - actual)/sample_count
 
             dW = ((2*np.dot(self.feature_data , predictions-self.label))/self.sample_count)
             dJ = ((2*np.sum(predictions-self.label))/self.sample_count)
