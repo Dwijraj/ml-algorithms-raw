@@ -17,7 +17,7 @@ class LinearRegression:
     
     def train(self, iterations):
 
-        for i in range(self.iterations):
+        for i in range(iterations):
             predictions = np.dot(self.feature_data, self.weight) + self.bias
 
             # Parital differentiation of cost function MSE J = sum(( prediction - actual)^2)/sample_count
