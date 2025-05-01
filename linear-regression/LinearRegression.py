@@ -12,8 +12,8 @@ class LinearRegression:
         sample_count , feature_count = feature_data.shape
         self.sample_count = sample_count
         self.feature_count = feature_count
-        self.weight= ModelWeightInitializer.generateRandomWeightsVector(self.feature_count)
-        self.bias=0
+        self._weight= ModelWeightInitializer.generateRandomWeightsVector(self.feature_count)
+        self._bias=0
     
     def train(self, iterations):
 
@@ -38,11 +38,11 @@ class LinearRegression:
 
     @property
     def bias(self):
-        return self.bias       
+        return self._bias       
 
     @property
     def weight(self):
-        return self.weight
+        return self._weight
 
 features = np.array([[1, 2], [3, 4]])
 labels = np.array([10, 20])
