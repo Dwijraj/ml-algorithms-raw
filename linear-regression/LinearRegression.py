@@ -1,16 +1,17 @@
 import numpy as np
+from validators.LinearRegressionInputValidator import LinearRegressionInputValidator
 
 class LinearRegression:
     
     def __init__(self, feature_data, label):
-        self.__check(feature_data, label)
-        self.feature_data=np.arrafeature_data
+        self.input_validator= LinearRegressionInputValidator(feature_data, label)
+        self.feature_data=feature_data
         self.label=label
     
     def __train():
         pass
 
-    def __check(self, feature_data, label):
 
-
-lin = LinearRegression(np.array([1,2]), np.array([2,3]))
+features = np.array([[1, 2], [3, 4]])
+labels = np.array([10, 20])
+l = LinearRegression(features, labels)
