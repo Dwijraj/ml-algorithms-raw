@@ -17,5 +17,5 @@ class BaseAlgorithmValidator(ABC):
         label_shape = label.shape
 
         if shape_features[1] != label_shape[0]:
-            print("Feature shape ", shape_features[1] , " label shape ", label_shape[0])
+            print("Feature shape ", shape_features , " label shape ", label_shape)
             raise ValueError("Training data shape and label shape don't match")
