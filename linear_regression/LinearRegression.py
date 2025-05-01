@@ -21,6 +21,7 @@ class LinearRegression:
             predictions = np.dot(self.feature_data, self.weight) + self.bias
 
             # Parital differentiation of cost function MSE J = sum(( prediction - actual)^2)/sample_count
+            # def calculateMseLoss(actual, predicted)
             # dJ/dW = 2*X*(prediction - actual)/sample_count
             # dJ/dB = 2*(prediction - actual)/sample_count
 
@@ -30,10 +31,16 @@ class LinearRegression:
             self.weight = self.weight- self.learning_rate*dW
             self.bias = self.bias - self.learning_rate*dJ
 
-            print("Iteration ", i , " weights ", self.weight, " bias ", self.bias)
+            print("Iteration ", i , " weights ", self.weight, " bias ", self.bias, "loss" , self.calculateMseLoss(predictions, self.label))
 
     def predict(self, attributes):
         return np.dot(attributes,self.weight)+self.bias
+    
+    def calculateMseLoss(actual, predicted):
+        if actual.length != predicted.length:
+            raise ValueError("Length mismatch")
+        
+        return (np.sum(actual-predicted)**2)/(actual.length)
         
 
     @property
