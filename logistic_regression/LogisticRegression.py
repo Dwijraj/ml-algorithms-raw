@@ -28,8 +28,7 @@ class LogisticRegression:
         return 1 if self.__sigmoidFunction(np.dot(attributes,self.weight)+self.bias) >= self.threshold else 0
     
     def __sigmoidFunction(self, x):
-            z = np.asarray(z, dtype=np.float64)          # accepts scalars & arrays
-            # clip to avoid overflow when z is very negative/positive
+            z = np.asarray(z, dtype=np.float64)
             z = np.clip(z, -500, 500)                   
             return 1.0 / (1.0 + np.exp(-z))
     
