@@ -14,3 +14,12 @@ def ensure_column_vector(arr):
     if arr.ndim == 1:
         arr = arr.reshape(-1, 1)
     return arr
+
+def plotLineGraph(xlabel, ylabel, title, xdata, ydata):
+    # Plotting
+    plt.plot(xdata, ydata, marker='o', linestyle='-', color='blue')
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    plt.title(title)
+    plt.grid(True)
+    plt.show()
