@@ -75,11 +75,11 @@ class LogisticRegression:
         #     total_loss = total_loss + self.__calculateLoss(actual_label, predicted_probability)
 
         # return total_loss
-        
+
         epsilon = 1e-15  # to avoid log(0)
         predicted = np.clip(predicted, epsilon, 1 - epsilon)
 
-        loss = -np.mean(actual * np.log(predicted) + (1 - actual) * np.log(1 - predicted))
+        loss = -np.mean(self.__calculateLoss(actual, predicted))
         return loss
 
 
