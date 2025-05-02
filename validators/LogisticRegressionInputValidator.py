@@ -14,4 +14,4 @@ class LogisticRegressionInputValidator(BaseAlgorithmValidator):
     
     def __checkThreshold(self, threshold):
         if threshold < 0 or threshold > 1:
-            raise ValueError("Threshold indicates cut-off probability and ")
+            raise ValueError("Threshold indicates cut-off probability and it can't be below 0 or above 1")
