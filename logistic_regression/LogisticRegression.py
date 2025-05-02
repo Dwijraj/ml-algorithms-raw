@@ -58,7 +58,7 @@ class LogisticRegression:
             return 1.0 / (1.0 + np.exp(-z))
     
     def calculateBinaryCrossEntropyLoss(self, actual, predicted):
-        actual = np.asarray(actual, dtype=np.float64)
+        target = np.asarray(actual, dtype=np.float64)
         predicted = np.asarray(predicted, dtype=np.float64)
 
         if target.shape != predicted.shape:
