@@ -9,7 +9,9 @@ class LogisticRegressionInputValidator(BaseAlgorithmValidator):
         self.__checkThreshold(threshold)
     
     def __checkLabelsProvided(self, labels):
-        if len(np.unique(labels)) > 2:
+        uniques = np.unique(labels)
+        if len(uniques) > 2:
+            print(uniques)
             raise ValueError("More than 2 classes found , logistic regression needs only 2 classes at most")
     
     def __checkThreshold(self, threshold):

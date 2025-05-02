@@ -16,7 +16,7 @@ class LogisticRegression:
         self.threshold= threshold
         data_shape = feature_data.shape
         self.sample_count = data_shape[0]
-        self.feature_count = 1 if len(data_shape) == 1 else data_shape[1]
+        self.feature_count = data_shape[1]
         self._weight= ModelWeightInitializer.generateRandomWeightsVector(self.feature_count)
         self._bias=0
         self._loss=[]
@@ -24,15 +24,15 @@ class LogisticRegression:
     def train(self, iterations, logTrainingParams= False):
         self._loss=[]
         for i in range(iterations):
-            predicted_probability = self.__sigmoidFunction(np.dot(self.feature_data, self.weight) + self.bias)
+            predicted_probability = LogisticRegression.sigmoidFunction(np.dot(self.feature_data, self.weight) + self.bias)
 
-            # Parital differentiation of cost function MSE J = sum(-ylog(y_pred) -(1-y)log(1-y_pred))/sample_count y in {0,1} y_pred 0 <= y <=1
+            # Parital differentiation of cost function BCE J = sum(-ylog(y_pred) -(1-y)log(1-y_pred))/sample_count y in {0,1} y_pred 0 <= y <=1
             # def calculateBinaryCrossEntropyLoss(actual, predicted)
             # dJ/dW = X.T*(prediction - actual)/sample_count
             # dJ/dB = (prediction - actual)/sample_count
 
             error = predicted_probability-self.label
-            dW = ((np.dot(self.feature_data , error))/self.sample_count)
+            dW = ((np.dot(self.feature_data.T , error))/self.sample_count)
             dJ = ((np.sum(error))/self.sample_count)
 
             self._weight = self._weight- self.learning_rate*dW
@@ -44,17 +44,22 @@ class LogisticRegression:
                 print("Iteration ", i , " weights ", self.weight, " bias ", self.bias, "loss" , loss)
 
     def predict(self, attributes):
-        probs = self.__sigmoidFunction(np.dot(attributes, self.weight) + self.bias)
-        return (probs >= self.threshold).astype(int)
+        probs = LogisticRegression.sigmoidFunction(np.dot(attributes, self.weight) + self.bias)
+        return LogisticRegression.getLabelFromProbability(probs, self.threshold)
     
-    def __sigmoidFunction(self, z):
+    @staticmethod
+    def getLabelFromProbability(probs, threshold):
+        return (probs >= threshold).astype(int)
+    
+    @staticmethod
+    def sigmoidFunction(z):
             z = np.asarray(z, dtype=np.float64)
             z = np.clip(z, -500, 500)                   
             return 1.0 / (1.0 + np.exp(-z))
     
     def calculateBinaryCrossEntropyLoss(self, actual, predicted):
-        target = np.asarray(actual, dtype=np.float64)
-        predicted = np.asanyarray(predicted, dtype=np.float64)
+        actual = np.asarray(actual, dtype=np.float64)
+        predicted = np.asarray(predicted, dtype=np.float64)
 
         if target.shape != predicted.shape:
             raise ValueError("Predicted vector and target vector lists don't match.")
@@ -65,9 +70,6 @@ class LogisticRegression:
         if not ((predicted >= 0) & (predicted <= 1)).all():
             raise ValueError("Predicted contains values which are not in range 0 to 1")
         
-        shape = target.shape
-        total_loss = 0
-
         # for i in range(shape[0]):
 
         #     predicted_probability=predicted[i]
@@ -83,12 +85,10 @@ class LogisticRegression:
         return loss
 
 
-    def __calculateLoss(self, actual : bool, predictedProbability: float):
-
-        if actual:
-            return -np.log(predictedProbability)
-        else:
-            return -np.log(1-predictedProbability)
+    def __calculateLoss(self, actual, predictedProbability):
+        epsilon = 1e-15
+        predicted = np.clip(predictedProbability, epsilon, 1 - epsilon)
+        return -(actual * np.log(predicted) + (1 - actual) * np.log(1 - predicted))
 
     @property
     def bias(self):
