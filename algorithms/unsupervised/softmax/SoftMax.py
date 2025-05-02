@@ -1,0 +1,5 @@
+from validators.LogisticRegressionInputValidator import LogisticRegressionInputValidator
+from utils.ModelWeightInitializer import ModelWeightInitializer
+import numpy as np
+
+class SoftMax:
