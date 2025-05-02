@@ -81,7 +81,7 @@ class LogisticRegression:
         epsilon = 1e-15  # to avoid log(0)
         predicted = np.clip(predicted, epsilon, 1 - epsilon)
 
-        loss = -np.mean(self.__calculateLoss(actual, predicted))
+        loss = np.mean(self.__calculateLoss(actual, predicted))
         return loss
 
 
