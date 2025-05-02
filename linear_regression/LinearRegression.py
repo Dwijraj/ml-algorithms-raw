@@ -20,7 +20,7 @@ class LinearRegression:
         self._bias=0
         self._loss=[]
     
-    def train(self, iterations):
+    def train(self, iterations, logTrainingParams= False):
 
         self._loss=[]
         for i in range(iterations):
@@ -39,7 +39,8 @@ class LinearRegression:
             loss = self.calculateMseLoss(predictions, self.label)
             self._loss.append(loss)
 
-            print("Iteration ", i , " weights ", self.weight, " bias ", self.bias, "loss" , loss)
+            if logTrainingParams and i%1000 == 0:
+                print("Iteration ", i , " weights ", self.weight, " bias ", self.bias, "loss" , loss)
 
     def predict(self, attributes):
         return np.dot(attributes,self.weight)+self.bias
