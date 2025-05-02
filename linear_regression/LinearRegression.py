@@ -36,7 +36,7 @@ class LinearRegression:
 
             self._weight = self._weight- self.learning_rate*dW
             self._bias = self._bias - self.learning_rate*dJ
-            loss = self.calculateMseLoss(predictions, self.label)
+            loss = self.calculateMseLoss(self.label, predictions)
             self._loss.append(loss)
 
             if logTrainingParams and i%1000 == 0:
@@ -46,10 +46,11 @@ class LinearRegression:
         return np.dot(attributes,self.weight)+self.bias
     
     def calculateMseLoss(self,actual, predicted):
-        if len(actual) != len(predicted):
+        actual    = np.asarray(actual).reshape(-1)
+        predicted = np.asarray(predicted).reshape(-1)
+        if actual.shape != predicted.shape:
             raise ValueError("Length mismatch")
-        
-        return np.sum((actual - predicted) ** 2) / len(actual)
+        return np.mean((actual - predicted) ** 2)
         
 
     @property
@@ -63,7 +64,3 @@ class LinearRegression:
     @property
     def trainingLoss(self):
         return self._loss
-
-features = np.array([[1, 2], [3, 4]])
-labels = np.array([10, 20])
-l = LinearRegression(features, labels)
