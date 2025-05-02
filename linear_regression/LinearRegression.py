@@ -5,18 +5,24 @@ from utils.ModelWeightInitializer import ModelWeightInitializer
 class LinearRegression:
     
     def __init__(self, feature_data, label, learning_rate=0.01):
+        if feature_data.ndim == 1:
+            feature_data = feature_data.reshape(-1, 1)
+        if label.ndim == 1:
+            label = label.reshape(-1, 1)
         self.input_validator= LinearRegressionInputValidator(feature_data, label)
         self.feature_data=feature_data
         self.label=label
         self.learning_rate = learning_rate
-        sample_count , feature_count = feature_data.shape
-        self.sample_count = sample_count
-        self.feature_count = feature_count
+        data_shape = feature_data.shape
+        self.sample_count = data_shape[0]
+        self.feature_count = 1 if len(data_shape) == 1 else data_shape[1]
         self._weight= ModelWeightInitializer.generateRandomWeightsVector(self.feature_count)
         self._bias=0
+        self._loss=[]
     
     def train(self, iterations):
 
+        self._loss=[]
         for i in range(iterations):
             predictions = np.dot(self.feature_data, self.weight) + self.bias
 
@@ -24,23 +30,25 @@ class LinearRegression:
             # def calculateMseLoss(actual, predicted)
             # dJ/dW = 2*X*(prediction - actual)/sample_count
             # dJ/dB = 2*(prediction - actual)/sample_count
+            error = predictions-self.label
+            dW = ((2*np.dot(self.feature_data.T , error))/self.sample_count)
+            dJ = ((2*np.sum(error))/self.sample_count)
 
-            dW = ((2*np.dot(self.feature_data , predictions-self.label))/self.sample_count)
-            dJ = ((2*np.sum(predictions-self.label))/self.sample_count)
+            self._weight = self._weight- self.learning_rate*dW
+            self._bias = self._bias - self.learning_rate*dJ
+            loss = self.calculateMseLoss(predictions, self.label)
+            self._loss.append(loss)
 
-            self.weight = self.weight- self.learning_rate*dW
-            self.bias = self.bias - self.learning_rate*dJ
-
-            print("Iteration ", i , " weights ", self.weight, " bias ", self.bias, "loss" , self.calculateMseLoss(predictions, self.label))
+            print("Iteration ", i , " weights ", self.weight, " bias ", self.bias, "loss" , loss)
 
     def predict(self, attributes):
         return np.dot(attributes,self.weight)+self.bias
     
-    def calculateMseLoss(actual, predicted):
-        if actual.length != predicted.length:
+    def calculateMseLoss(self,actual, predicted):
+        if len(actual) != len(predicted):
             raise ValueError("Length mismatch")
         
-        return (np.sum(actual-predicted)**2)/(actual.length)
+        return np.sum((actual - predicted) ** 2) / len(actual)
         
 
     @property
@@ -50,6 +58,10 @@ class LinearRegression:
     @property
     def weight(self):
         return self._weight
+    
+    @property
+    def trainingLoss(self):
+        return self._loss
 
 features = np.array([[1, 2], [3, 4]])
 labels = np.array([10, 20])

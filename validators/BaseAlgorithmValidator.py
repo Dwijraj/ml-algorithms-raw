@@ -13,9 +13,15 @@ class BaseAlgorithmValidator(ABC):
         if not isinstance(label, np.ndarray):
             raise ValueError("Not valid label of array input!")
 
+        if feature_data.ndim == 1:
+            feature_data = feature_data.reshape(-1, 1)
+
         shape_features = feature_data.shape
         label_shape = label.shape
 
-        if shape_features[1] != label_shape[0]:
-            print("Feature shape ", shape_features , " label shape ", label_shape)
+        if label.ndim == 1:
+            label = label.reshape(-1, 1)
+
+        if shape_features[0] != label_shape[0]:
+            print("Feature shape:", shape_features, "Label shape:", label_shape)
             raise ValueError("Training data shape and label shape don't match")
