@@ -1,0 +1,8 @@
+1. Deep learning at it's very crux is just layers of matrix multiplication. 
+2. The training process of deep learning contains 3 main steps 
+    a. Forward propagation :- We predict based on our paramters the label and calculate the error using suitable loss function.
+    b. Gradient calculation :- We find the gradient of our parameters w , b wrt to the loss function to determine how much to change and which direction.
+    c. Backward propagation :- We update the parameters in the reverse order 
+    Z = WX+B 
+    A = ActivationFunction(Z)
+    Z1 = 
